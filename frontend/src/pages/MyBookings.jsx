@@ -10,6 +10,8 @@ const MyBookings = () => {
         setBookings(dummyMyBookingsData);
     }
 
+    const currency = import.meta.env.VITE_CURRENCY;
+
     useEffect(()=>{
         fetchMyBookings();
     },[])
@@ -20,7 +22,7 @@ const MyBookings = () => {
             <div>
                 {bookings.map((booking,index)=>(
                     <div key={booking._id} className="grid grid-cols-1 md:grid-cols-4 gap-6 p-6 border border-borderColor rounded-lg mt-5 first:mt-12">
-                        <div className="md:col-span-2">
+                        <div className="md:col-span-1">
                             <div className="rounded-md overflow-hidden mb-3">
                                 <img src={booking.car.image} alt="car" className="w-full  h-auto aspect-video object-cover"/>
                             </div>
@@ -50,6 +52,14 @@ const MyBookings = () => {
                                 </div>
                             </div>
                         </div>
+                        <div className="md:col-span-1 flex flex-col justify-between gap-6">
+                            <div className="text-sm text-gray-500 text-right">
+                                <p>Total Price</p>
+                                <p className="text-2xl text-primary font-semibold">{currency} {booking.price}</p>
+                                <p>Booked on {booking.createdAt.split('T')[0]}</p>
+                            </div>
+                        </div>
+
                     </div>
                 ))}
             </div>
