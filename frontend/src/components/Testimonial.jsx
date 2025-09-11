@@ -28,7 +28,7 @@ const Testimonial = () => {
     ];
 
     return (
-        <div className="py-28 mx-auto max-w-6xl">
+        <div className="py-28 max-w-6xl mx-auto">
             <Title title="What Our Customers Say" subTitle="Hear what our users say about us. We're always looking for ways to improve. If you have a positive experience with us, leave a review." />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-18">
