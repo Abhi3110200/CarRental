@@ -38,11 +38,11 @@ const AddCar = () => {
                 <div className=" grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col w-full">
                         <label>Brand</label>
-                        <input type="text" placeholder="e.g. Toyota, BMW, Mercedes, Audi..." className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.brand} onChange={(e) => setCar({ ...car, brand: e.target.value })} />
+                        <input type="text" required placeholder="e.g. Toyota, BMW, Mercedes, Audi..." className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.brand} onChange={(e) => setCar({ ...car, brand: e.target.value })} />
                     </div>
                     <div className="flex flex-col w-full">
                         <label>Model</label>
-                        <input type="text" placeholder="e.g. X5, E-Class, S-Class..." className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.model} onChange={(e) => setCar({ ...car, model: e.target.value })} />
+                        <input type="text" required placeholder="e.g. X5, E-Class, S-Class..." className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.model} onChange={(e) => setCar({ ...car, model: e.target.value })} />
                     </div>
                 </div>
 
@@ -57,7 +57,7 @@ const AddCar = () => {
                     </div>
                     <div className="flex flex-col w-full">
                         <label>Category</label>
-                        <select className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.category} onChange={(e) => setCar({ ...car, category: e.target.value })}>
+                        <select required className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.category} onChange={(e) => setCar({ ...car, category: e.target.value })}>
                             <option value="">Select Category</option>
                             <option value="SUV">SUV</option>
                             <option value="Sedan">Sedan</option>
@@ -70,6 +70,56 @@ const AddCar = () => {
                     </div>
 
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div className="flex flex-col w-full">
+                        <label>Transmission</label>
+                        <select required className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.transmission} onChange={(e) => setCar({ ...car, transmission: e.target.value })}>
+                            <option value="">Select Transmission</option>
+                            <option value="Automatic">Automatic</option>
+                            <option value="Manual">Manual</option>
+                            <option value="Semi-Automatic">Semi-Automatic</option>
+                        </select>
+                    </div>
+                <div className="flex flex-col w-full">
+                        <label>Fuel Type</label>
+                        <select required className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.fuel_type} onChange={(e) => setCar({ ...car, fuel_type: e.target.value })}>
+                            <option value="">Select Fuel Type</option>
+                            <option value="Petrol">Petrol</option>
+                            <option value="Diesel">Diesel</option>
+                            <option value="Electric">Electric</option>
+                            <option value="Hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col w-full">
+                        <label>Seating Capacity</label>
+                        <input type="number" required placeholder="e.g. 5" className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.seating_capacity} onChange={(e) => setCar({ ...car, seating_capacity: e.target.value })} />
+                    </div>
+                </div>
+
+                <div className="flex flex-col w-full">
+                    <label>Location</label>
+                    <select required className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.location} onChange={(e) => setCar({ ...car, location: e.target.value })}>
+                        <option value="">Select Location</option>
+                        <option value="New York">New York</option>
+                        <option value="Los Angeles">Los Angeles</option>
+                        <option value="Chicago">Chicago</option>
+                        <option value="Houston">Houston</option>
+                        <option value="Phoenix">Phoenix</option>
+                        <option value="Philadelphia">Philadelphia</option>
+                        <option value="San Antonio">San Antonio</option>
+                    </select>
+                </div>
+
+                <div className="flex flex-col w-full">
+                    <label>Description</label>
+                    <textarea required rows={5} placeholder="e.g. Description" className="mt-1 py-2 px-3 border border-borderColor rounded-md outline-none" value={car.description} onChange={(e) => setCar({ ...car, description: e.target.value })}></textarea>
+                </div>
+
+                <button className="flex items-center gap-2 px-4 py-2.5 mt-4 bg-primary text-white rounded-lg font-medium w-max cursor-pointer">
+                    <img src={assets.tick_icon} alt="submit" />
+                    List Your Car
+                </button>
             </form>
         </div>
     )
