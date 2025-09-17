@@ -1,16 +1,34 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { assets, dummyUserData, ownerMenuLinks } from "../../assets/assets";
+import { assets, ownerMenuLinks } from "../../assets/assets";
 import { useState } from "react";
+import { useAppContext } from "../../context/AppContext";
+import { toast } from "react-hot-toast";
+import axios from "axios";
 
 const Sidebar = () => {
 
-    const user = dummyUserData;
+    const {user, axios, fetchUser} =  useAppContext();
     const location = useLocation();
     const [image, setImage] = useState('');
 
     const updateImage = async()=>{
-        user.image = URL.createObjectURL(image);
-        setImage('');
+        try {
+            const formData = new FormData();
+            formData.append('image',image);
+            const {data} = await axios.post('/api/owner/update-image',formData);
+            console.log(data);
+            if(data.success){
+                fetchUser();
+                toast.success(data.message);
+                setImage('')
+            }else{
+                toast.error(data.message);
+            }
+            
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message);
+        }
     }
 
     return (
@@ -18,7 +36,7 @@ const Sidebar = () => {
 
             <div className="relative group">
                 <label htmlFor="image">
-                    <img src={image ? URL.createObjectURL(image) : user.image || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300"} className="h-9 md:h-14 w-9 md:w-14 rounded-full mx-auto"/>
+                    <img src={image ? URL.createObjectURL(image) : user?.image || "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=300"} className="h-9 md:h-14 w-9 md:w-14 rounded-full mx-auto"/>
                     <input type='file' id="image" accept="image/*" hidden onChange={(e)=>setImage(e.target.files[0])}/>
 
                     <div className="absolute bottom-0 right-0 top-0 left-0 flex items-center justify-center hidden bg-black/10 group-hover:flex rounded-full cursor-pointer">

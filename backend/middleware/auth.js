@@ -1,20 +1,30 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
-export const protect = async(req,res,next)=>{
-    const token = req.headers.authorization;
-    if(!token){
-        return res.json({success: false, message: "Unauthorized" });
+export const protect = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return res.status(401).json({ success: false, message: "Unauthorized: No token" });
     }
-    try {
-        const userId = jwt.decode(token, process.env.JWT_SECRET);
-        if(!userId){
-            return res.json({success: false, message: "Unauthorized" });
-        }
 
-       req.user = await User.findById(userId.userId).select("-password");
-       next();
-    } catch (error) {
-        return res.json({success: false, message: "Unauthorized" });
+    const token = authHeader.split(" ")[1];
+
+    const decoded = jwt.verify(token, "akjdwjr2389dnd823nrndjnr293rh"); // use process.env.JWT_SECRET in real apps
+
+    if (!decoded?.userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: Invalid token" });
     }
-}
+
+    req.user = await User.findById(decoded.userId).select("-password");
+
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: "Unauthorized: User not found" });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Auth error:", error.message);
+    return res.status(401).json({ success: false, message: "Unauthorized: Token error" });
+  }
+};

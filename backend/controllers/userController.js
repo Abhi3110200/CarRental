@@ -1,6 +1,7 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import Car from "../models/Car.js";
 
 const generateToken = (userId) => {
     return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "2d" });
@@ -64,8 +65,19 @@ export const loginUser = async(req, res)=>{
 export const getUserData = async(req, res)=>{
     try {
         const {user}=req;
+        console.log(user);
         res.json({success: true, user});
         
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({success: false, message: "Something went wrong" });
+    }
+}
+
+export const getCars = async(req, res)=>{
+    try {
+        const cars = await Car.find({isAvailable: true});
+        res.json({success: true, cars});
     } catch (error) {
         console.log(error);
         res.status(500).json({success: false, message: "Something went wrong" });

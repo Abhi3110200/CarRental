@@ -1,8 +1,12 @@
 import { useState } from "react";
 import Title from "../../components/owner/Title";
 import { assets } from "../../assets/assets";
+import { useAppContext } from "../../context/AppContext";
+import toast from "react-hot-toast";
 
 const AddCar = () => {
+
+    const {axios,currency} = useAppContext();
 
     const [image, setImage] = useState(null);
     const [car, setCar] = useState({
@@ -18,10 +22,43 @@ const AddCar = () => {
         location: '',
     })
 
-    const currency = import.meta.env.VITE_CURRENCY;
-
+    const [loading, setLoading] = useState(false);
     const onSubmitHanlder = async (e) => {
         e.preventDefault();
+        if(loading) return null;
+
+        setLoading(true);
+        try {
+            const formData = new FormData();
+
+            formData.append('image', image);
+            formData.append('carData', JSON.stringify(car));
+
+            const {data} = await axios.post('/api/owner/add-car',formData);
+
+            if(data.success){
+                toast.success(data.message);
+                setImage(null);
+                setCar({
+                    brand: '',
+                    model: '',
+                    year: 0,
+                    pricePerDay: 0,
+                    description: '',
+                    category: '',
+                    seating_capacity: 0,
+                    fuel_type: '',
+                    transmission: '',
+                    location: '',
+                })
+            }else{
+                toast.error(data.message);
+            }
+        } catch (error) {
+            toast.error(error.message);
+        }finally{
+            setLoading(false);
+        }
     }
     return (
         <div className="px-4 py-10 md:px-10 flex-1">
@@ -118,7 +155,7 @@ const AddCar = () => {
 
                 <button className="flex items-center gap-2 px-4 py-2.5 mt-4 bg-primary text-white rounded-lg font-medium w-max cursor-pointer">
                     <img src={assets.tick_icon} alt="submit" />
-                    List Your Car
+                    {loading ? "Loading..." : "List Your Car"}
                 </button>
             </form>
         </div>

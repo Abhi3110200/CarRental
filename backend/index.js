@@ -5,14 +5,20 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import userRouter from "./routes/userRoutes.js";
 import ownerRouter from "./routes/ownerRoutes.js";
+import bookingRouter from "./routes/bookingRoutes.js";
 
 const app = express();
 // /?retryWrites=true&w=majority&appName=Cluster0
-app.use(cors());
+app.use(cors({
+    origin: "*",
+    credentials: true
+}));
 app.use(express.json());
+
 
 app.use("/api/user", userRouter);
 app.use("/api/owner", ownerRouter);
+app.use("/api/booking", bookingRouter);
 
 app.get("/", (req, res) => {
     res.send("Hello World!");

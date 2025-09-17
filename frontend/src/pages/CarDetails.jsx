@@ -3,22 +3,43 @@ import { useNavigate } from "react-router-dom"
 import { useEffect, useState } from "react"
 import { assets, dummyCarData } from "../assets/assets";
 import Loader from "../components/Loader";
+import { useAppContext } from "../context/AppContext";
+import toast from "react-hot-toast";
 
 const CarDetails = () => {
 
-    const currency = import.meta.env.VITE_CURRENCY;
+    const {cars,currency, pickupDate, returnDate, axios, setPickupDate, setReturnDate} = useAppContext();
+
     const { id } = useParams();
     const navigate = useNavigate();
     const [car, setCar] = useState(null);
 
     useEffect(() => {
         setTimeout(() => {
-            setCar(dummyCarData.find((car) => car._id === id))
+            setCar(cars.find((car) => car._id === id))
         }, 2000)
-    }, [id]);
+    }, [cars,id]);
 
     const handleSubmit = async(e) => {
         e.preventDefault();
+        try {
+            const {data} = await axios.post("/api/booking/create", {
+                car:car._id,
+                pickupDate,
+                returnDate,
+            })
+            console.log(data.message);
+            if(data.success){
+                toast.success(data.message)
+                navigate("/my-bookings")
+            }else{
+                console.log(data.message);
+                toast.error(data.message)
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error(error.message)
+        }
     }
 
     return car ? (
@@ -79,11 +100,11 @@ const CarDetails = () => {
 
                         <div className="flex flex-col gap-2">
                             <label htmlFor="pickup-date">Pickup Date</label>
-                            <input type="date" required id="pickup-date" min={new Date().toISOString().split("T")[0]} className=" border border-borderColor rounded-lg px-3 py-2" />
+                            <input value={pickupDate} onChange={(e) => setPickupDate(e.target.value)} type="date" required id="pickup-date" min={new Date().toISOString().split("T")[0]} className=" border border-borderColor rounded-lg px-3 py-2" />
                         </div>
                         <div className="flex flex-col gap-2">
                             <label htmlFor="return-date">Return Date</label>
-                            <input type="date" required id="return-date" className=" border border-borderColor rounded-lg px-3 py-2" />
+                            <input value={returnDate} onChange={(e) => setReturnDate(e.target.value)} type="date" required id="return-date" className=" border border-borderColor rounded-lg px-3 py-2" />
                         </div>
 
                         <button className="w-full bg-primary hover:bg-primary-dull transition-all py-3 font-medium text-white rounded-xl cursor-pointer">Book Now</button>
