@@ -10,7 +10,7 @@ import bookingRouter from "./routes/bookingRoutes.js";
 const app = express();
 // /?retryWrites=true&w=majority&appName=Cluster0
 app.use(cors({
-    origin: [process.env.FRONTEND_URL, "*"],
+    origin: ["http://localhost:5173","*"],
     credentials: true
 }));
 app.use(express.json());
